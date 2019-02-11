@@ -1,6 +1,7 @@
 class Movie < ActiveRecord::Base
     @all_ratings = ['G','PG','PG-13','R']
     
+    # sort movies based on one attribute
     def self.sorting(input)
         if input
             self.order(input)
@@ -9,10 +10,12 @@ class Movie < ActiveRecord::Base
         end
     end
     
+    # list all the movie ratings
     def self.all_ratings
         @all_ratings
     end
     
+    # select movies where rating = [...]
     def self.with_ratings(ratings)
         self.where(rating: ratings)
     end

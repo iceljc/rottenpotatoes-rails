@@ -26,9 +26,6 @@ class MoviesController < ApplicationController
         @rating_filter = @all_ratings
       end
       @movies = @movies.with_ratings(@rating_filter)
-    else
-      @rating_filter = @all_ratings
-      @movies = @movies.with_ratings(@rating_filter)
     end
     
     

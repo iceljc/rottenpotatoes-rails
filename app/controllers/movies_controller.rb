@@ -15,8 +15,8 @@ class MoviesController < ApplicationController
     # @all_ratings = Movie.all_ratings
     
     if params[:sort]
-      @sorted = params[:sort]
-      @movies = @movies.sorting(@sorted)
+      @sort = params[:sort]
+      @movies = @movies.sorting(@sort)
     end
     
     # if params[:commit] == 'Refresh'

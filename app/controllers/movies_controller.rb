@@ -25,9 +25,10 @@ class MoviesController < ApplicationController
       else
         @rating_filter = @all_ratings
       end
+      @movies = @movies.with_ratings(@rating_filter)
     end
     
-    @movies = @movies.with_ratings(@rating_filter)
+    
     
     
   end

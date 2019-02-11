@@ -21,7 +21,7 @@ class MoviesController < ApplicationController
     
     if params[:commit] == 'Refresh'
       if params[:ratings]
-        @rating_filter = params[:ratings]
+        @rating_filter = params[:ratings].keys
       else
         @rating_filter = @all_ratings
       end

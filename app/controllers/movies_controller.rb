@@ -12,11 +12,28 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
+    @all_ratings = Movie.all_ratings
+    
     if params[:sort]
       @sorted = params[:sort]
       @movies = @movies.sorting(@sorted)
     end
+    
+    if params[:commit] = 'Refresh'
+      if params[:ratings]
+        @rating_filter = params[:ratings]
+      else
+        @rating_filter = @all_ratings
+      end
+    end
+    
+    
+    
+    
   end
+
+
+
 
   def new
     # default: render 'new' template

@@ -12,21 +12,21 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
-    # @all_ratings = Movie.all_ratings
+    @all_ratings = Movie.all_ratings
     
     if params[:sort]
       @sort = params[:sort]
       @movies = @movies.sorting(@sort)
     end
     
-    # if params[:commit] == 'Refresh'
-    #   if params[:ratings]
-    #     @ratings_filter = params[:ratings].keys
-    #   else
-    #     @ratings_filter = @all_ratings
-    #   end
-    #   @movies = @movies.with_ratings(@ratings_filter)
-    # end
+    if params[:commit] == 'Refresh'
+      if params[:ratings]
+        @ratings_filter = params[:ratings].keys
+      else
+        @ratings_filter = @all_ratings
+      end
+      @movies = @movies.with_ratings(@ratings_filter)
+    end
     
     
     

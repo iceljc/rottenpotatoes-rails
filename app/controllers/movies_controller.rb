@@ -31,6 +31,7 @@ class MoviesController < ApplicationController
         @rating_filter = session[:ratings]
       else
         @rating_filter = @all_ratings
+      end
     end
     
     if params[:sort] != session[:sort]

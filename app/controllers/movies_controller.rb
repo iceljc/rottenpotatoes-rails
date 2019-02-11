@@ -27,7 +27,7 @@ class MoviesController < ApplicationController
       end
     end
     
-    
+    @movies = @movies.with_ratings(@rating_filter)
     
     
   end

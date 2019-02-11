@@ -15,6 +15,7 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     
     if params[:aaa]
+      print params[:aaa]
       @sorted = params[:aaa]
     else
       @sorted = session[:aaa]

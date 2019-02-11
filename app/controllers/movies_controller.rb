@@ -15,17 +15,17 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     
     if params[:sort]
-      @sort = params[:sort]
-      @movies = @movies.sorting(@sort)
+      @sorted = params[:sort]
+      @movies = @movies.sorting(@sorted)
     end
     
     if params[:commit] == 'Refresh'
       if params[:ratings]
-        @ratings_filter = params[:ratings].keys
+        @rating_filter = params[:ratings].keys
       else
-        @ratings_filter = @all_ratings
+        @rating_filter = @all_ratings
       end
-      @movies = @movies.with_ratings(@ratings_filter)
+      @movies = @movies.with_ratings(@rating_filter)
     end
     
     

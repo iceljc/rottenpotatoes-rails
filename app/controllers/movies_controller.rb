@@ -20,15 +20,15 @@ class MoviesController < ApplicationController
       @sorted = session[:sort]
     end
     
-    if params[:aaa] == 'Refresh'
-      if params[:ratings]
-        @rating_filter = params[:ratings].keys
+    if params[:commit] == 'Refresh'
+      if params[:aaa]
+        @rating_filter = params[:aaa].keys
       else
         @rating_filter = @all_ratings
       end
     else
-      if session[:ratings]
-        @rating_filter = session[:ratings]
+      if session[:aaa]
+        @rating_filter = session[:aaa]
       else
         @rating_filter = @all_ratings
       end
@@ -37,8 +37,8 @@ class MoviesController < ApplicationController
     if params[:sort] != session[:sort]
       session[:sort] = @sorted
     end
-    if params[:ratings] != session[:ratings]
-      session[:ratings] = @rating_filter
+    if params[:aaa] != session[:aaa]
+      session[:aaa] = @rating_filter
     end
     
     @movies = @movies.sorting(@sorted)

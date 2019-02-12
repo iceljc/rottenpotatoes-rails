@@ -20,7 +20,7 @@ class MoviesController < ApplicationController
       @sorted = session[:sort]
     end
     
-    if params[:commit] == 'Refresh'
+    if params[:aaa] == 'Refresh'
       if params[:ratings]
         @rating_filter = params[:ratings].keys
       else

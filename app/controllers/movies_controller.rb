@@ -19,7 +19,7 @@ class MoviesController < ApplicationController
 
     if params[:ratings]
       session[:ratings] = params[:ratings]
-      @ratings = session[:ratings].keys
+      @ratings = session[:ratings]
     else
       if params[:utf8] # Form is submitted with all ratings unchecked
         @ratings = []

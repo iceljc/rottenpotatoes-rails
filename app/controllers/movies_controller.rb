@@ -13,60 +13,42 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
     @all_ratings = Movie.all_ratings
-    
-    
-    session[:sort] = params[:sort] if params[:sort]
 
-    if params[:ratings]
-      session[:ratings] = params[:ratings]
-      @ratings = session[:ratings]
+    if params[:sort]
+      @sorted = params[:sort]
     else
-      if params[:utf8] # Form is submitted with all ratings unchecked
-        @ratings = []
-      elsif session[:ratings]
-        flash.keep
-        redirect_to movies_path(sort: session[:sort], ratings: session[:ratings])
+      @sorted = session[:sort]
+    end
+
+    if params[:commit] == 'Refresh'
+      if params[:ratings]
+        @rating_filter = params[:ratings].keys
       else
-        @ratings = @all_ratings
+        @rating_filter = @all_ratings
+      end
+    else
+      if params[:ratings]
+        @rating_filter = params[:ratings].keys
+      else
+        if session[:ratings]
+          flash.keep
+          redirect_to movies_path
+          # @rating_filter = session[:ratings]
+        else
+          @rating_filter = @all_ratings
+        end
       end
     end
-    @movies = @movies.sorting(session[:sort])
-    @movies = @movies.with_ratings(@ratings)
     
-
+    if params[:sort] != session[:sort]
+      session[:sort] = @sorted
+    end
+    if params[:ratings] != session[:ratings]
+      session[:ratings] = @rating_filter
+    end
     
-    
-    
-
-    # if params[:sort]
-    #   @sorted = params[:sort]
-    # else
-    #   @sorted = session[:sort]
-    # end
-
-    # if params[:commit] == 'Refresh'
-    #   if params[:ratings]
-    #     @rating_filter = params[:ratings].keys
-    #   else
-    #     @rating_filter = @all_ratings
-    #   end
-    # else
-    #   if session[:ratings]
-    #     @rating_filter = session[:ratings]
-    #   else
-    #     @rating_filter = @all_ratings
-    #   end
-    # end
-    
-    # if params[:sort] != session[:sort]
-    #   session[:sort] = @sorted
-    # end
-    # if params[:ratings] != session[:ratings]
-    #   session[:ratings] = @rating_filter
-    # end
-    
-    # @movies = @movies.sorting(@sorted)
-    # @movies = @movies.with_ratings(@rating_filter)
+    @movies = @movies.sorting(@sorted)
+    @movies = @movies.with_ratings(@rating_filter)
     
   end
 

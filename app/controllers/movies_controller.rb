@@ -12,39 +12,32 @@ class MoviesController < ApplicationController
 
   def index
     # @movies = Movie.all
+    session[:ratings] = params[:ratings] if params[:ratings]
+    session[:sort] = params[:sort] if params[:sort]
+
+    # redirect to RESTful path if session contains more info than provided in params
+    if (!params[:ratings] && session[:ratings]) || (!params[:sort] && session[:sort])
+      redirect_to movies_path(ratings: session[:ratings], sort: session[:sort])
+    end
+
+    query_base = Movie
+
+    if session[:ratings]
+      query_base = query_base.scoped(:conditions => { :rating => session[:ratings].keys })
+    end
+
+    if session[:sort]
+      query_base = query_base.scoped(:order => session[:sort])
+    end
+
+    @movies = query_base.all
+
     @all_ratings = Movie.all_ratings
-    
-    @checked_ratings = params[:ratings] if params.has_key? 'ratings'
-    @sorted = params[:sort] if params.has_key? 'sort'
 
-    # session.clear where user submit empty rating filters
-    if params.has_key? 'utf8'
-      session.delete :checked_ratings
-      session.delete :sorted
-    end
-
-    # update session from incoming params
-    session[:checked_ratings] = @checked_ratings if @checked_ratings
-    session[:sorted] = @sorted if @sorted
-
-    if !@checked_ratings && !@sorted && session[:checked_ratings]
-      @checked_ratings = session[:checked_ratings] unless @checked_ratings
-      @sorted = session[:sorted] unless @sorted
-
-      flash.keep
-      redirect_to movies_path({sort: @sorted, ratings: @checked_ratings})
-    end
-
-    if @checked_ratings
-      if @sorted      
-        @movies = Movie.find_all_by_rating(@checked_ratings, :order => "#{@sorted} asc")
-      else
-        @movies = Movie.find_all_by_rating(@checked_ratings)
-      end
-    elsif @sorted
-      @movies = Movie.all(:order => "#{@sorted} asc")
-    else 
-      @movies = Movie.all
+    if session[:ratings]
+      @selected_ratings = session[:ratings]
+    else
+      @selected_ratings = {}
     end
     
     

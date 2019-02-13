@@ -20,6 +20,12 @@ class MoviesController < ApplicationController
       @sorted = session[:sort]
     end
     
+    # clear session when user submit empty rating filter
+    if params.has_key? 'utf8'
+      session.delete :sorted
+      session.delete :rating_filter
+    end
+    
     if params[:commit] == 'Refresh'
       if params[:ratings]
         @rating_filter = params[:ratings].keys
@@ -39,12 +45,6 @@ class MoviesController < ApplicationController
     end
     if params[:ratings] != session[:ratings]
       session[:ratings] = @rating_filter
-    end
-    
-    # clear session when user submit empty rating filter
-    if params.has_key? 'utf8'
-      session.delete :sorted
-      session.delete :rating_filter
     end
     
     @movies = @movies.sorting(@sorted)

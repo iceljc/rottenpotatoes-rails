@@ -42,7 +42,7 @@ class MoviesController < ApplicationController
     end
     
     # clear session when user submit empty rating filter
-    if params.has_key? 'utf-8'
+    if params.has_key? 'utf8'
       session.delete :sorted
       session.delete :rating_filter
     end

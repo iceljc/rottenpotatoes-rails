@@ -11,44 +11,69 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    # @movies = Movie.all
     @all_ratings = Movie.all_ratings
     
-    if params[:sort]
-      @sorted = params[:sort]
-    else
-      @sorted = session[:sort]
-    end
-    
-    # clear session when user submit empty rating filter
+    @checked_ratings = params[:ratings] if params.has_key? 'ratings'
+    @sorted = params[:sort] if params.has_key? 'sort'
+
+    # session.clear where user submit empty rating filters
     if params.has_key? 'utf8'
+      session.delete :checked_ratings
       session.delete :sorted
-      session.delete :rating_filter
     end
-    
-    if params[:commit] == 'Refresh'
-      if params[:ratings]
-        @rating_filter = params[:ratings].keys
+
+    # update session from incoming params
+    session[:checked_ratings] = @checked_ratings if @checked_ratings
+    session[:sorted] = @sorted if @sorted
+
+    if !@checked_ratings && !@sorted && session[:checked_ratings]
+      @checked_ratings = session[:checked_ratings] unless @checked_ratings
+      @sorted = session[:sorted] unless @sorted
+
+      flash.keep
+      redirect_to movies_path({sort: @sorted, ratings: @checked_ratings})
+    end
+
+    if @checked_ratings
+      if @sorted      
+        @movies = Movie.find_all_by_rating(@checked_ratings, :order => "#{@sorted} asc")
       else
-        @rating_filter = @all_ratings
+        @movies = Movie.find_all_by_rating(@checked_ratings)
       end
-    else
-      if session[:ratings]
-        @rating_filter = session[:ratings]
-      else
-        @rating_filter = @all_ratings
-      end
+    elsif @sorted
+      @movies = Movie.all(:order => "#{@sorted} asc")
+    else 
+      @movies = Movie.all
     end
     
-    if params[:sort] != session[:sort]
-      session[:sort] = @sorted
-    end
-    if params[:ratings] != session[:ratings]
-      session[:ratings] = @rating_filter
-    end
     
-    @movies = @movies.sorting(@sorted)
-    @movies = @movies.with_ratings(@rating_filter)
+    
+    
+    
+    # if params[:commit] == 'Refresh'
+    #   if params[:ratings]
+    #     @rating_filter = params[:ratings].keys
+    #   else
+    #     @rating_filter = @all_ratings
+    #   end
+    # else
+    #   if session[:ratings]
+    #     @rating_filter = session[:ratings]
+    #   else
+    #     @rating_filter = @all_ratings
+    #   end
+    # end
+    
+    # if params[:sort] != session[:sort]
+    #   session[:sort] = @sorted
+    # end
+    # if params[:ratings] != session[:ratings]
+    #   session[:ratings] = @rating_filter
+    # end
+    
+    # @movies = @movies.sorting(@sorted)
+    # @movies = @movies.with_ratings(@rating_filter)
     
   end
 

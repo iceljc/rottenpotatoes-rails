@@ -30,7 +30,7 @@ class MoviesController < ApplicationController
       if session[:ratings]
         @rating_filter = session[:ratings]
         flash.keep
-        redirect_to movies_path(sort: @sorted, ratings: @rating_filter)
+        redirect_to movies_path(sort: session[:sort], ratings: session[:ratings])
       else
         @rating_filter = @all_ratings
       end

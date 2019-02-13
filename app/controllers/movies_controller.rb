@@ -19,22 +19,33 @@ class MoviesController < ApplicationController
     else
       @sorted = session[:sort]
     end
-
-    if params[:commit] == 'Refresh'
-      if params[:ratings]
-        @rating_filter = params[:ratings].keys
-      else
-        @rating_filter = @all_ratings
-      end
+    
+    if params[:ratings]
+      @rating_filter = params[:ratings].keys
     else
-      if session[:ratings]
+      if params[:utf8] # Form is submitted with all ratings unchecked
+        @rating_filter = []
+      elsif session[:ratings]
         flash.keep
         redirect_to movies_path(sort: session[:sort], ratings: session[:ratings])
-        @rating_filter = session[:ratings]
       else
-        @rating_filter = @all_ratings
+        @ratings = @all_ratings
       end
     end
+
+    # if params[:commit] == 'Refresh'
+    #   if params[:ratings]
+    #     @rating_filter = params[:ratings].keys
+    #   else
+    #     @rating_filter = @all_ratings
+    #   end
+    # else
+    #   if session[:ratings]
+    #     @rating_filter = session[:ratings]
+    #   else
+    #     @rating_filter = @all_ratings
+    #   end
+    # end
     
     if params[:sort] != session[:sort]
       session[:sort] = @sorted

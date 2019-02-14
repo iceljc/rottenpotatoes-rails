@@ -14,11 +14,6 @@ class MoviesController < ApplicationController
     @movies = Movie.all
     @all_ratings = Movie.all_ratings
     
-    if (params[:sort].nil? && !session[:sort].nil?) || (params[:ratings].nil? && !session[:ratings].nil?)
-      flash.keep
-      redirect_to movies_path(:sort => session[:sort], :ratings => session[:ratings])
-    end
-    
     if params[:sort]
       @sorted = params[:sort]
     else
@@ -28,7 +23,7 @@ class MoviesController < ApplicationController
     if params[:commit] == 'Refresh'
       if params[:ratings]
         @rating_filter = params[:ratings].keys
-      else  # press 'Refresh' and select nothing
+      else  # press 'Refresh' while selecting nothing
         @rating_filter = @all_ratings
       end
     else

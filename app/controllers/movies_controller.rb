@@ -25,8 +25,10 @@ class MoviesController < ApplicationController
     if params[:commit] == 'Refresh'
       if params[:ratings]
         @rating_filter = params[:ratings].keys
+        redirect = false
       else  # press 'Refresh' while selecting nothing
         @rating_filter = @all_ratings
+        redirect = false
       end
     else
       if params[:ratings]

@@ -23,9 +23,10 @@ class MoviesController < ApplicationController
     if params[:commit] == 'Refresh'
       if params[:ratings]
         @rating_filter = params[:ratings].keys
+        @sorted = nil
       else  # press 'Refresh' while selecting nothing
         @rating_filter = @all_ratings
-        @sort = nil
+        @sorted = nil
       end
     else
       if params[:ratings]

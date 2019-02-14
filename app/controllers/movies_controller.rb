@@ -13,6 +13,7 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
     @all_ratings = Movie.all_ratings
+    redirect = false
     
     if params[:sort]
       @sorted = params[:sort]

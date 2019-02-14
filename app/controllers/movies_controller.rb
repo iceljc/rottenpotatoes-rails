@@ -20,7 +20,7 @@ class MoviesController < ApplicationController
       redirect = false
     else
       @sorted = session[:sort]
-      redirect = true
+
     end
 
     if params[:commit] == 'Refresh'
@@ -45,7 +45,12 @@ class MoviesController < ApplicationController
       end
     end
     
-    
+    if session[:sort] != @sorted
+      session[:sort] = @sorted
+    end
+    if session[:ratings] != @rating_filter
+      session[:ratings] = @rating_filter
+    end
     
     if redirect
       flash[:notice] = "redirecting..."
@@ -56,12 +61,6 @@ class MoviesController < ApplicationController
       @movies = @movies.with_ratings(@rating_filter)
     end
 
-    if session[:sort] != @sorted
-      session[:sort] = @sorted
-    end
-    if session[:ratings] != @rating_filter
-      session[:ratings] = @rating_filter
-    end
     
   end
 

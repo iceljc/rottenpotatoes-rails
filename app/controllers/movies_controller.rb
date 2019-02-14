@@ -45,22 +45,23 @@ class MoviesController < ApplicationController
       end
     end
     
+    
+    
+    if redirect
+      flash[:notice] = "redirecting..."
+      flash.keep
+      redirect_to movies_path(:sort => session[:sort], :ratings => session[:ratings])
+    else
+      @movies = @movies.sorting(@sorted)
+      @movies = @movies.with_ratings(@rating_filter)
+    end
+
     if session[:sort] != @sorted
       session[:sort] = @sorted
     end
     if session[:ratings] != @rating_filter
       session[:ratings] = @rating_filter
     end
-    
-    if redirect
-      flash[:notice] = "redirecting..."
-      flash.keep
-      redirect_to movies_path(:sort => @sorted, :ratings => @rating_filter)
-    else
-      @movies = @movies.sorting(@sorted)
-      @movies = @movies.with_ratings(@rating_filter)
-    end
-
     
   end
 

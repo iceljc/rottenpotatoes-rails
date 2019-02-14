@@ -25,6 +25,7 @@ class MoviesController < ApplicationController
         @rating_filter = params[:ratings].keys
       else  # press 'Refresh' while selecting nothing
         @rating_filter = @all_ratings
+        @sort = nil
       end
     else
       if params[:ratings]

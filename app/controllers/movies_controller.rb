@@ -40,7 +40,7 @@ class MoviesController < ApplicationController
           redirect = false
         else
           @rating_filter = @all_ratings
-          redirect = true
+          redirect = false
         end
       end
     end

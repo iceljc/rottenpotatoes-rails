@@ -20,7 +20,7 @@ class MoviesController < ApplicationController
       redirect = false
     else
       @sorted = session[:sort]
-
+      redirect = false
     end
 
     if params[:commit] == 'Refresh'

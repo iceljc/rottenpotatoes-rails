@@ -13,23 +13,18 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
     @all_ratings = Movie.all_ratings
-    redirect = false
     
     if params[:sort]
       @sorted = params[:sort]
-      redirect = false
     else
       @sorted = session[:sort]
-      redirect = false
     end
 
     if params[:commit] == 'Refresh'
       if params[:ratings]
         @rating_filter = params[:ratings].keys
-        redirect = false
       else  # press 'Refresh' while selecting nothing
         @rating_filter = @all_ratings
-        redirect = false
       end
     else
       if params[:ratings]
@@ -37,10 +32,8 @@ class MoviesController < ApplicationController
       else
         if session[:ratings]
           @rating_filter = session[:ratings]
-          redirect = false
         else
           @rating_filter = @all_ratings
-          redirect = false
         end
       end
     end
@@ -52,16 +45,9 @@ class MoviesController < ApplicationController
       session[:ratings] = @rating_filter
     end
     
-    if redirect
-      flash[:notice] = "redirecting..."
-      flash.keep
-      redirect_to movies_path(:sort => @sorted, :ratings => @rating_filter)
-    else
-      @movies = @movies.sorting(@sorted)
-      @movies = @movies.with_ratings(@rating_filter)
-    end
+    @movies = @movies.sorting(@sorted)
+    @movies = @movies.with_ratings(@rating_filter)
 
-    
   end
 
 

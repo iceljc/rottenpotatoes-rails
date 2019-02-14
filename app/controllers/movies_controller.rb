@@ -13,7 +13,7 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
     @all_ratings = Movie.all_ratings
-    redirect_to = false
+    redirect = false
     
     if params[:sort]
       @sorted = params[:sort]
@@ -33,7 +33,7 @@ class MoviesController < ApplicationController
       else
         if session[:ratings]
           @rating_filter = session[:ratings]
-          redirect_to = true
+          redirect = true
         else
           @rating_filter = @all_ratings
         end

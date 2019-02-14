@@ -17,8 +17,10 @@ class MoviesController < ApplicationController
     
     if params[:sort]
       @sorted = params[:sort]
+      redirect = false
     else
       @sorted = session[:sort]
+      redirect = true
     end
 
     if params[:commit] == 'Refresh'
@@ -36,6 +38,7 @@ class MoviesController < ApplicationController
           redirect = true
         else
           @rating_filter = @all_ratings
+          redirect = false
         end
       end
     end

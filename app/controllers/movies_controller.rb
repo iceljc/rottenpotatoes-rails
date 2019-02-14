@@ -53,6 +53,7 @@ class MoviesController < ApplicationController
     end
     
     if redirect
+      flash[:notice] = "redirecting..."
       flash.keep
       redirect_to movies_path(:sort => @sorted, :ratings => @rating_filter)
     else

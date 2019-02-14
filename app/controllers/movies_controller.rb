@@ -33,7 +33,7 @@ class MoviesController < ApplicationController
       else
         if session[:ratings]
           @rating_filter = session[:ratings]
-          redirect = true
+          redirect = false
         else
           @rating_filter = @all_ratings
           redirect = false

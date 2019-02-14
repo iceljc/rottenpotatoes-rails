@@ -35,6 +35,7 @@ class MoviesController < ApplicationController
         redirect = false
       else
         @selected_ratings = session[:ratings]
+        redirect = true
       end
     else
       @selected_ratings = (params[:ratings].is_a?(Hash)) ? params[:ratings].keys : params[:ratings]

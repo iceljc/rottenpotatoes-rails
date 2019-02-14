@@ -45,8 +45,10 @@ class MoviesController < ApplicationController
       session[:ratings] = @rating_filter
     end
     
-    @movies = @movies.sorting(@sorted)
-    @movies = @movies.with_ratings(@rating_filter)
+    flash.keep
+    redirect_to movies_path(:sort => @sorted, :ratings => @rating_filter)
+    # @movies = @movies.sorting(@sorted)
+    # @movies = @movies.with_ratings(@rating_filter)
 
     
   end

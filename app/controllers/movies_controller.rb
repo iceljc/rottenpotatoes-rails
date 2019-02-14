@@ -24,6 +24,7 @@ class MoviesController < ApplicationController
         redirect = false
       else
         @hlite = session[:sort]
+        redirect = true
       end
     else
       @hilite = params[:sort]
@@ -48,7 +49,7 @@ class MoviesController < ApplicationController
       flash.keep
       redirect_to movies_path(:sort => @hilite, :ratings => @selected_ratings)
     else
-      @movies = (@hilite == nil) ? Movie.where(:rating => @selected_ratings) : Movie.order(@hilite.to_sym).where(:rating => @selected_ratings)
+      @movies = (@hilite == nil) ? @movies.with_ratings(@selected_ratings) : @movies.sorting(@hilite).with_ratings(@selected_ratings)
     end
     
 

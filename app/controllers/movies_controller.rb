@@ -40,12 +40,12 @@ class MoviesController < ApplicationController
       redirect_to movies_path :sort => @sorted, :ratings => @rating_filter
     end
     
-    # if !@rating_filter.nil?
-    #   @selected_rating = Hash.new
-    #   @all_ratings.each do |rating|
-    #     @selected_rating[rating] = 1
-    #   end
-    # end
+    if !@rating_filter.nil?
+      @rating_filter = Hash.new
+      @all_ratings.each do |rating|
+        @rating_filter[rating] = 1
+      end
+    end
     
     if @sorted && @rating_filter
       @movies = Movie.all

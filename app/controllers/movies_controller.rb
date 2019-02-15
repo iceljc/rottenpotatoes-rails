@@ -36,26 +36,26 @@ class MoviesController < ApplicationController
     
     if redirect
       flash.keep
-      redirect_to :sort => @sorted, :ratings => @rating_filter
+      redirect_to movies_path :sort => @sorted, :ratings => @rating_filter
     end
     
-    if !@rating_filter.nil?
-      @selected_rating = Hash.new
-      @all_ratings.each do |rating|
-        @selected_rating[rating] = 1
-      end
-    end
+    # if !@rating_filter.nil?
+    #   @selected_rating = Hash.new
+    #   @all_ratings.each do |rating|
+    #     @selected_rating[rating] = 1
+    #   end
+    # end
     
     if @sorted && @rating_filter
       @movies = Movie.all
       @movies = @movies.sorting(@sorted)
-      @movies.with_ratings(@selected_rating.keys)
+      @movies.with_ratings(@rating_filter.keys)
     elsif @sorted
       @movies = Movie.all
       @movies = @movies.sorting(@sorted)
     elsif @rating_filter
       @movies = Movie.all
-      @movies.with_ratings(@selected_rating.keys)
+      @movies.with_ratings(@rating_filter.keys)
     else
       @movies = Movie.all
     end

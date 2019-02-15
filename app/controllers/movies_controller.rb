@@ -11,59 +11,35 @@ class MoviesController < ApplicationController
   end
 
   def index
-    # @movies = Movie.all
+    @movies = Movie.all
     @all_ratings = Movie.all_ratings
-    redirect = false
     
     if params[:sort]
       @sorted = params[:sort]
-      session[:sort] = @sorted
-    elsif session[:sort]
-      redirect = true
+    else
       @sorted = session[:sort]
-    else
-      @sorted = nil
     end
     
-    if params[:ratings]
-      @rating_filter = params[:ratings]
+    case @sort
+    when 'title'
+      ordering,@title_header = {:title => :asc}, 'hilite'
+    when 'release_date'
+      ordering,@date_header = {:release_date => :asc}, 'hilite'
+    end
+    
+    @rating_filter = params[:ratings] || session[:ratings] || {}
+    
+    if @rating_filter == {}
+      @rating_filter = Hash[@all_ratings.map {|rating| [rating, rating]}]
+    end
+    
+    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
+      session[:sort] = @sorted
       session[:ratings] = @rating_filter
-    elsif session[:ratings]
-      redirect = true
-      @ratings_filter = session[:ratings]
-    else
-      @ratings_filter = nil
+      redirect_to :sort => @sorted, :ratings => @rating_filter and return
     end
     
-    if redirect
-      flash.keep
-      redirect_to movies_path :sort => @sorted, :ratings => @rating_filter
-    end
-    
-    if !@rating_filter.nil?
-      @rating_filter = Hash.new
-      @all_ratings.each do |rating|
-        @rating_filter[rating] = 1
-      end
-    end
-    
-    if @sorted && @rating_filter
-      @movies = Movie.all
-      @movies = @movies.sorting(@sorted)
-      @movies = @movies.with_ratings(@rating_filter.keys)
-    elsif @sorted
-      @movies = Movie.all
-      @movies = @movies.sorting(@sorted)
-    elsif @rating_filter
-      @movies = Movie.all
-      @movies = @movies.with_ratings(@rating_filter.keys)
-    else
-      @movies = Movie.all
-    end
-    
-    
-      
-        
+    @movies = Movie.where(rating: @rating_filter.keys).order(ordering)
     
     
     # @movies = Movie.all

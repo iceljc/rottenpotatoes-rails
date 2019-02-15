@@ -36,7 +36,7 @@ class MoviesController < ApplicationController
     
     if redirect
       flash.keep
-      redirect_to :sort => @sorted, :ratings => rating_filter
+      redirect_to :sort => @sorted, :ratings => @rating_filter
     end
     
     if !@rating_filter.nil?

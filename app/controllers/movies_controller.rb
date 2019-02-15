@@ -11,6 +11,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+    # @movies = Movie.all
     @all_ratings = Movie.all_ratings
     redirect = false
     
@@ -49,13 +50,13 @@ class MoviesController < ApplicationController
     if @sorted && @rating_filter
       @movies = Movie.all
       @movies = @movies.sorting(@sorted)
-      @movies.with_ratings(@rating_filter.keys)
+      @movies = @movies.with_ratings(@rating_filter.keys)
     elsif @sorted
       @movies = Movie.all
       @movies = @movies.sorting(@sorted)
     elsif @rating_filter
       @movies = Movie.all
-      @movies.with_ratings(@rating_filter.keys)
+      @movies = @movies.with_ratings(@rating_filter.keys)
     else
       @movies = Movie.all
     end

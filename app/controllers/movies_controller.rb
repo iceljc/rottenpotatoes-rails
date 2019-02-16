@@ -20,7 +20,7 @@ class MoviesController < ApplicationController
     elsif session[:sort] != nil
       @sort_by = session[:sort]
     else
-      @sort_by = nil
+      @sort_by = 'id'
     end
     
     if params[:ratings] != nil

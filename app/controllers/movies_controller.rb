@@ -46,7 +46,7 @@ class MoviesController < ApplicationController
       @movies = Movie.where(rating: selected_ratings).order(@sort_by)
     else
       @rating_filter = @all_ratings
-      movies = Movie.order(@sort_by)
+      @movies = Movie.order(@sort_by)
       # if @sort_by != nil
       #   @movies = Movie.order(@sort_by)
       # else

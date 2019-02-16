@@ -13,45 +13,48 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
     @all_ratings = Movie.all_ratings
-    
-    if params[:sort]
-      @sorted = params[:sort]
-    else
-      @sorted = session[:sort]
-    end
 
-    if params[:commit] == 'Refresh'
-      if params[:ratings]
-        @rating_filter = params[:ratings].keys
-      else  # press 'Refresh' while selecting nothing
-        @rating_filter = @all_ratings
-        @sorted = nil
-      end
+    if params[:sort] != nil
+      @sort_by = params[:sort]
+      # session[:sort] = params[:sort]
+    elsif session[:sort] != nil
+      @sort_by = session[:sort]
     else
-      if params[:ratings]
-        @ratings_filter = (params[:ratings].is_a?(Hash)) ? params[:ratings].keys : params[:ratings]
-      else
-        if session[:ratings]
-          @rating_filter = session[:ratings]
-        else
-          @rating_filter = @all_ratings
-        end
-      end
+      @sort_by = nil
     end
     
-    if @sorted != session[:sort] 
-      session[:sort] = @sorted
+    if params[:ratings] != nil
+      @rating_filter = params[:ratings]
+      session[:ratings] = params[:ratings]
+    elsif session[:ratings] != nil
+      @rating_filter = session[:ratings]
+    else
+      @rating_filter = nil
     end
     
-    if @rating_filter != session[:ratings]
+    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
       session[:ratings] = @rating_filter
+      session[:sort] = @sort_by
+      flash.keep
+      redirect_to movies_path(:sort => @sort_by, :ratings => @rating_filter)
+      return
+    end
+
+
+    if @rating_filter != nil
+      selected_ratings = (@rating_filter.is_a?(Hash)) ? @rating_filter.keys : @rating_filter
+      @movies = Movie.where(rating: selected_ratings).order(@sort_by)
+    else
+      @rating_filter = @all_ratings
+      movies = Movie.order(@sort_by)
+      # if @sort_by != nil
+      #   @movies = Movie.order(@sort_by)
+      # else
+      #   @movies = Movie.all
+      # end
     end
     
-    @movies = @movies.sorting(@sorted)
-    @movies = @movies.with_ratings(@rating_filter)
-
   end
-
 
 
 
